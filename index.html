@@ -311,7 +311,7 @@ body {font-family: Verdana,sans-serif;margin:0}
 	  When the Shuffle Entries button is clicked the entries are reordered randomly. Filtering for species can be done with the Filter button. Filtered entries are automatically shuffled. I've only included filters for the most common entries.
 	  <br><br>At the moment the layout of this tool is only designed for use on computers. It will work on phones, but crappily. If you need to use it on a phone turn the phone horizontal. I plan on making this nicer in the future.
 	  <br><br>I've tried to make everything as intuitive as possible. Feel free to shoot me an email at ethanlebowitz@gmail.com if you have any questions, or suggestions. This tool is still in beta so if you notice a bug please email me!
-	  <br><br>Also, if you like this tool be sure to check out the wonderful tracking community over at <a href="http://www.reddit.com/r/AnimalTracking">www.reddit.com/r/AnimalTracking</a>
+	  <br><br>Also, if you like this tool be sure to check out the wonderful tracking community over at <a href="https://www.reddit.com/r/AnimalTracking">www.reddit.com/r/AnimalTracking</a>
 	  <br><br>I hope you enjoy! <br><br>Ethan Lebowitz.
   </div></div></div>
   <p>
@@ -451,7 +451,7 @@ async function anchorCheck(){//check if there's an anchor and if there is go to 
 	console.log(anchor);
 	if(anchor != ""){
 		iteration = -1; //so when next is clicked it will go to the first entry.	
-		var URL="http://api.inaturalist.org/v1/observations/"+anchor
+		var URL="https://api.inaturalist.org/v1/observations/"+anchor
 		var prelimData = await getData(URL, 0);
 		console.log("anchored",prelimData);	
 		await parseEntry(prelimData.results[0]);
@@ -529,7 +529,7 @@ async function generateFilterTable(){ //this is where both additions and subtrac
 function generateHTML(images, entryID, entry, total){ //generates html for a new entry
 	var answer = entry.taxon.preferred_common_name;
 	document.getElementById("answer").innerHTML = answer; //puts entry.species_guess in the answer div
-	var shareLink = "http://www.ducks.blue/track.html#"+entry.id;
+	var shareLink = "https://ethanlebowitz.github.io/trackingCards/#"+entry.id;
 	document.getElementById("shareLink").innerHTML = shareLink; //link in div
 	var location = entry.place_guess;
 	document.getElementById("location").innerHTML = location; //displays location
