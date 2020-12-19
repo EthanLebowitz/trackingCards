@@ -221,7 +221,11 @@ body {font-family: Verdana,sans-serif;margin:0}
 #species{width:70%;}
 	
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+			  src="https://code.jquery.com/jquery-3.5.1.js"
+			  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+			  crossorigin="anonymous">
+</script>
 </head> 
 <body>
 	
@@ -345,14 +349,14 @@ function showAnswer(){ //function toggled by Show Answer button. Hides if shown,
 	}
 }
 	
-var baseUrl = "http://api.inaturalist.org/v1/observations?identified=true&photos=true&project_id=962&quality_grade=research&page=${page}&per_page=${perpage}&order=desc&order_by=created_at"; //generated from https://api.inaturalist.org/v1/docs/#/ 
+var baseUrl = "http://api.inaturalist.org/v1/observations?identified=true&photos=true&project_id=962&quality_grade=research&page=${page}&per_page=${perpage}&order=desc&order_by=created_at&callback=?"; //generated from https://api.inaturalist.org/v1/docs/#/ 
 var entryIndexes = [];  //where secondary iteration and associated url indexes are stored
 var filterURLs = [];  //where species filtered urls are stored
 	
 function generateURLs(){ //generate filter urls from filters
 	filterURLs = []; 
 	taxonIdChoices.forEach(function(taxonID){
-		filterURLs.push("http://api.inaturalist.org/v1/observations?identified=true&photos=true&project_id=962&quality_grade=research&page=${page}&per_page=${perpage}&order=desc&order_by=created_at"+taxonID);
+		filterURLs.push("http://api.inaturalist.org/v1/observations?identified=true&photos=true&project_id=962&quality_grade=research&page=${page}&per_page=${perpage}&order=desc&order_by=created_at&callback=?"+taxonID);
 	});
 }
 	
