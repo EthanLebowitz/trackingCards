@@ -1,5 +1,6 @@
 <head>
 <!-- Made by Ethan Lebowitz-->
+<!-- This whole thing is pretty nasty and has to be refactored x-->
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114157785-1"></script>
 <script>
@@ -330,7 +331,8 @@ var totalEntries=0;
 var shuffled = false;
 var linkIndex=0;
 var internalTotalEntries;
-var anchored = (location.hash != "")
+var anchored = (location.hash != "");
+var IDsAt10kMarkers = []; //entry ID for the 10,000th entry, the 20,000th entry, etc.
 
 $('#answer').hide(); //hide the answer
 
@@ -377,6 +379,22 @@ function initializePostIndexGen(filtered){ //sets up first slideshow and shuffle
 	document.getElementById("entryTotal").innerHTML = totalEntries+" Entries Found"; //puts total entries in info
 	if(!anchored){sendQueries();}
 }
+
+async function getIDsAt10kMarkers(){ //can't retrieve entries over 10,000 without a filter so we deal with that by getting the ids of every 10,000th entry and using those to filter when we need something over the first 10,000th
+	var numberOf10ks = Math.floor(totalEntries / 10000);
+	var URL=baseUrl.replace("${page}", 1).replace("${perpage}", 1);
+	data = await getData(URL, 0);
+	var id = data.results[0].id;
+	var lastMarker = id;
+	for(var i = 0; i < numberOf10ks; i++){
+		var URL="https://api.inaturalist.org/v1/observations?identified=true&photos=true&project_id=962&quality_grade=research&page=${page}&per_page=${perpage}&order=desc&order_by=created_at&id_below=${marker}&callback=?".replace("${page}", 10000).replace("${perpage}", 1).replace("${marker}", lastMarker);
+		data = await getData(URL, 0);
+		var id = data.results[0].id;
+		IDsAt10kMarkers.push(id);
+		lastMarker = id;
+	}
+	console.log(IDsAt10kMarkers);
+}	
 	
 async function generateEntryIndexesList(){ //generates list of secondary iterations (indexes) using the filterURLs list
 	entryIndexes=[]; //resets
@@ -415,6 +433,12 @@ async function generateEntryIndexesList(){ //generates list of secondary iterati
 			for(i=0; i<internalTotalEntries; i++){ //do the whole indexing thing. Only 0 gets tacked onto the beginning because there's only the one link.
 				entryIndexes.push(URLindex+":"+i);
 			}
+			
+			if(totalEntries > 10000){
+				console.log("10k");
+				getIDsAt10kMarkers();
+			}
+			
 			initializePostIndexGen(false);
 		});
 	}
@@ -426,22 +450,27 @@ function getData(URL, URLindex) { //retrieves data from inat
 	console.log(URL);
 	var dat = $.getJSON(URL, function(rData) {
 		console.log(rData);
-		if(iteration == 0){//if the page just loaded put up first entry
-			var entry = rData.results[0];//defines entry as the 0th entry on the page
-			parseEntry(entry); //sets up starting slideshow
-		}
 	});
-  return dat;
+	return dat;
 }
 	
 async function sendQueries(){ //decides what link to use and then gets Data
 	if(filterURLs.length==0){ //if no filters use base URL
-		var URL=baseUrl.replace("${page}", page).replace("${perpage}", function(){if(!shuffled){return 30;}else{return 1;}});
+		if(page > 10000){ //just assume shuffled I think. Otherwise that would be a lot of clicking for the user.
+			var URL="https://api.inaturalist.org/v1/observations?identified=true&photos=true&project_id=962&quality_grade=research&page=${page}&per_page=${perpage}&order=desc&order_by=created_at&id_below=${marker}&callback=?".replace("${page}", page % 10000).replace("${perpage}", 1).replace("${marker}", IDsAt10kMarkers[Math.floor(page / 10000) - 1]); //-1 to convert to indexes
+		}else{
+			var URL=baseUrl.replace("${page}", page).replace("${perpage}", function(){if(!shuffled){return 30;}else{return 1;}});
+		}
 		data = await getData(URL, 0);
 	}
 	else{ //if there are filters use the filter URL associated with the linkIndex
 		var URL=filterURLs[linkIndex].replace("${page}", page).replace("${perpage}", 1); //will always be shuffled with filters so we only get 1 per page
 		data = await getData(URL, linkIndex);
+	}
+	
+	if(iteration == 0){//if the page just loaded put up first entry
+		var entry = data.results[0];//defines entry as the 0th entry on the page
+		parseEntry(entry); //sets up starting slideshow
 	}
 	return data;
 }	
