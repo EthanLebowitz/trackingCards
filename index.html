@@ -243,7 +243,7 @@ body {font-family: Verdana,sans-serif;margin:0}
 </div></td>
 <td width="30%" style="text-align:center" valign="top">
   <div id="location"></div>
-  <button type="submit" onclick="nextEntry(2)" class="subOptions wide">Shuffle Entries</button>	
+  <button type="submit" onclick="nextEntry(2)" class="subOptions wide">Shuffle Cards</button>	
 	<button type="submit" onclick="nextEntry(0)" class="options">Previous</button>
 	<button type="submit" onclick="nextEntry(1)" class="options">Next</button>
 	<br><br>
@@ -306,19 +306,24 @@ body {font-family: Verdana,sans-serif;margin:0}
   </div>
   <div id="about"><p>
 	  <h2>About</h2>
-	  This project is basically crowd sourced tracking flashcards. All entries are pulled from the iNaturalist <a href="https://www.inaturalist.org/projects/north-american-animal-tracking-database">North American Animal Tracking Database</a>.
-	  All entries used are "research grade" assuring for some degree of recognizability. As of the time of this writing there are about 5900 research grade entries. Clicking Show Answer will reveal iNaturalist's identification of the tracks. I can't guarantee that 100% of these will be right.
-	  <br><br>By default Next runs through the entries from newest to oldest. Some entries have more than one image associated with them. These can be navigated using the arrows. Clicking on an image will enlarge it. 
-	  When the Shuffle Entries button is clicked the entries are reordered randomly. Filtering for species can be done with the Filter button. Filtered entries are automatically shuffled. I've only included filters for the most common entries.
-	  <br><br>At the moment the layout of this tool is only designed for use on computers. It will work on phones, but crappily. If you need to use it on a phone turn the phone horizontal. I plan on making this nicer in the future.
-	  <br><br>I've tried to make everything as intuitive as possible. Feel free to shoot me an email at ethanlebowitz@gmail.com if you have any questions, or suggestions. This tool is still in beta so if you notice a bug please email me!
-	  <br><br>Also, if you like this tool be sure to check out the wonderful tracking community over at <a href="https://www.reddit.com/r/AnimalTracking">www.reddit.com/r/AnimalTracking</a>
-	  <br><br>I hope you enjoy! <br><br>Ethan Lebowitz.
+      <p>
+        This project is essentially crowd sourced tracking flashcards. All cards are generated from observations in the iNaturalist <a href="https://www.inaturalist.org/projects/north-american-animal-tracking-database">North American Animal Tracking Database</a>.
+        All observations used to generate cards have "research grade" identifications (meaning a critical mass of identifiers have aggreed on an identification) assuring for some degree of recognizability. As of the time of this writing there are about 27500 observations with research grade identifications. Clicking Show Answer will reveal iNaturalist's identification of the tracks. I can't guarantee that 100% of these will be right.
+      </p><p>
+        By default Next runs through the cards from newest to oldest. Some cards will have more than one image associated with them. These can be navigated using the arrows. Clicking on an image will enlarge it. 
+        When the Shuffle Cards button is clicked the cards are reordered randomly. Filtering for species can be done with the Filter button. Filtered cards are automatically shuffled. I've only included filters for the most common species.
+	  </p><p>
+        If you find this tool useful please consider donating to the project: <a href="https://paypal.me/UnrealDuck" target="_blank">https://paypal.me/UnrealDuck</a>
+      </p><p>
+        Also be sure to check out the wonderful tracking community over at <a href="https://www.reddit.com/r/AnimalTracking" target="_blank">www.reddit.com/r/AnimalTracking</a>
+	  </p><p>
+        Please send questions, bug reports, and words of encouragement to duckunreal@gmail.com.
+      </p><p>I hope you enjoy! </p><p>Ethan</p>
   </div></div></div>
   <p>
   <br>
   </p>
-  Share Entry: <div id="shareLink" style="background-color: lightblue; padding: 0px;"></div>
+  Share This Card: <div id="shareLink" style="background-color: lightblue; padding: 3px;"></div>
 </td>
 </tr></table>
 
@@ -369,14 +374,14 @@ function initializePostIndexGen(filtered){ //sets up first slideshow and shuffle
 	linkIndex=secondaryIteration[0];
 	console.log("secondaryit",secondaryIteration);
 	console.log("finished gening indexes");
-	document.getElementById("totalObs").innerHTML = totalEntries+" Entries Found"; //puts total entries in info
+	document.getElementById("totalObs").innerHTML = totalEntries+" Cards Generated"; //puts total entries in info
 	if(filtered){
 		page = parseFloat(secondaryIteration[1])+1;	
 	}
 	else{
 		page=1;
 	}
-	document.getElementById("entryTotal").innerHTML = totalEntries+" Entries Found"; //puts total entries in info
+	document.getElementById("entryTotal").innerHTML = totalEntries+" Cards Generated"; //puts total entries in info
 	if(!anchored){sendQueries();}
 }
 
@@ -565,9 +570,9 @@ function generateHTML(images, entryID, entry, total){ //generates html for a new
 	var link = entry.uri;
 	document.getElementById("linkObs").innerHTML = "<a href='"+link+"'>Go To Observation</a>"; //puts link to observation on inat in info
 	var total = entry.uri;
-	document.getElementById("totalObs").innerHTML = totalEntries+" Entries"; //puts total entries in info
+	document.getElementById("totalObs").innerHTML = totalEntries+" Cards"; //puts total entries in info
 	var currentEntry = iteration+1;
-	document.getElementById("currentObs").innerHTML = "Current Entry: "+currentEntry; //puts total entries in info
+	document.getElementById("currentObs").innerHTML = "Current Card: "+currentEntry; //puts total entries in info
 	document.getElementById("shuffled").innerHTML = "Shuffled: "+shuffled; //displays whether or not shuffled
 	var HTML=""; //container for generated html
 	for(i=0; i<images.length; i++){ //list of images is a list of image ids. For each id injects in links generated in block of html. objects with backup links serve to cover in case of jpg & JPG rather than jpeg. Ugly solution, I know.
