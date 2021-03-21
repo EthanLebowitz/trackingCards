@@ -579,9 +579,10 @@ function generateHTML(images, entryID, entry, total){ //generates html for a new
 		var currentImage = i+1;
 		var thumbnailURL=entry.observation_photos[i].photo.url; //get extention
 		var intermediateItem = thumbnailURL.split("/square.");
+		var thumbnailURLbase = thumbnailURL.split("photos/")[0] + "photos/"
 		var extention = intermediateItem[1].split("?")[0];
 		console.log(extention);
-		HTML=HTML+"<div class='mySlides fade'>\n<div class='numbertext'>" + currentImage +"/" + images.length + "</div><img src='https://static.inaturalist.org/photos/"+images[i]+"/original."+extention+"?' class='img' id='img"+i+"'></div>\n<div id='modal"+i+"' class='modal'><span class='close'>&times;</span><img class='modal-content' id='modalImg"+i+"'><div id='caption'></div></div>";
+		HTML=HTML+"<div class='mySlides fade'>\n<div class='numbertext'>" + currentImage +"/" + images.length + "</div><img src='"+thumbnailURLbase+images[i]+"/original."+extention+"?' class='img' id='img"+i+"'></div>\n<div id='modal"+i+"' class='modal'><span class='close'>&times;</span><img class='modal-content' id='modalImg"+i+"'><div id='caption'></div></div>";
 	}
 	if(images.length>1){//only add next and prev if there is more than 1 image
 		HTML=HTML+"\n\n<a class='prev' onclick='plusSlides(-1)'>&#10094;</a>\n<a class='next' onclick='plusSlides(1)'>&#10095;</a>\n"; //add next and prev buttons
